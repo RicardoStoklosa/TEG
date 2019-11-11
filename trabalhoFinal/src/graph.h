@@ -22,3 +22,9 @@ void showAdjList(vector<Edge> adj[]);
 void readInput(vector<Edge> adj[]);
 
 int hourToMinutes(string hour);
+
+int minDistance(int distancia[], bool previous[]);
+
+void dijkstra(int start, vector< Edge > adj[]);
+
+void showSolution(int dist[]);
