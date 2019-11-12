@@ -81,7 +81,7 @@ void dijkstra(int start, vector< Edge > adj[]){
         dist[i] = INF;
     }
     memset(path,-1,sizeof(path));
-    memset(time,-1,sizeof(path));
+    memset(time,0,sizeof(path));
     memset(mark,false,sizeof(mark));
 
     dist[start] = 0;
@@ -97,23 +97,22 @@ void dijkstra(int start, vector< Edge > adj[]){
             break;
 
         mark[v]=true;
-        //cout<<city<<"=>"<<citiesNames[v]<<"["<<time<<"]"<<endl;
-        cout<<"{"<<endl;
+        if(path[v]!=-1)
+            cout<<citiesNames[path[v]]<<"=>"<<time[v]<<" "<<citiesNames[v]<<endl;
         for(Edge edge : adj[v]){
-            cout<<"{"<<citiesNames[v]<<"->"<<citiesNames[edge.node]<<" "<<time[v]<<"}"<<endl;
 
             int to = edge.node;
             int cost = edge.cost;
-
-            if((dist[v]+cost)<dist[to]){
+            int arrival = edge.arrival;
+            int departure = edge.departure;
+            cout<<"Calc "<<citiesNames[v]<<"=>"<<citiesNames[to]<<" "<<departure<<"-"<<time[v]<<"="<<(departure-time[v])<<endl;
+            if((dist[v]+cost)<dist[to] && (departure-time[v])>=60){
                 dist[to]=dist[v]+cost;
                 path[to]=v;
-                time[v]=edge.arrival;
-                // cout<<citiesNames[v]<<"=>"<<citiesNames[to]<<"["<<time<<"]"<<endl;
+                time[to]=arrival;
                 city=citiesNames[v];
             }
         }
-        cout<<"}"<<endl;
     }
 
     vector<int> pathe;
@@ -123,10 +122,12 @@ void dijkstra(int start, vector< Edge > adj[]){
     pathe.push_back(getCity("SP"));
 
     reverse(pathe.begin(), pathe.end());
+    cout<<"[ ";
     for(int p:pathe){
         if(p!=-1)
-            cout<<citiesNames[p]<<endl;
+            cout<<citiesNames[p]<<" ";
     }
+    cout<<"]"<<endl;
     cout<<"Distancia "<<dist[getCity("NA")]<<endl;
 
 }
