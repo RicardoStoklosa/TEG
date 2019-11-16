@@ -1,13 +1,18 @@
 #include<bits/stdc++.h>
 #include"graph.h"
+#define MAX_PESSOAS 150
 
 using namespace std;
 
 int main(){
     vector< Edge > adj[NUM_CITIES];
     readInput(adj);
-    //addEdge(adj,getCity("SP"),getCity("POA"),2,4,hourToMinutes("1000"),hourToMinutes("1100"));
-    //addEdge(adj,getCity("SP"),getCity("MAN"),4,8,hourToMinutes("1100"),hourToMinutes("1920"));
+    int pessoas=0;
+    while(pessoas<=MAX_PESSOAS-1){
+        int viagem=dijkstra(getCity("SP"),adj,MAX_PESSOAS-pessoas);
+
+        pessoas+=viagem;
+    }
+    cout<<"Pessoas"<<pessoas<<endl;
     //showAdjList(adj);
-    dijkstra(getCity("SP"),adj);
 }

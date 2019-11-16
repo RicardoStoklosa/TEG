@@ -12,6 +12,12 @@ struct Edge{
     int arrival;
 };
 
+struct Flight{
+    int node;
+    int flow;
+    Edge *test;
+};
+
 
 int getCity(string name);
 
@@ -25,6 +31,6 @@ int hourToMinutes(string hour);
 
 int minDistance(int distancia[], bool previous[]);
 
-void dijkstra(int start, vector< Edge > adj[]);
+int dijkstra(int start, vector< Edge > adj[], int pessoas);
 
 void showSolution(int dist[]);

@@ -3,6 +3,6 @@ all:
 	./main < entrada
 gdb:
 	g++ graph.cpp main.cpp -o main -g
-	gdb main
+	gdb --ex run ./main < entrada
 run:
 	./main

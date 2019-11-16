@@ -71,17 +71,17 @@ int minDistance(int distancia[], bool path[]){
         return min_index;
 }
 
-void dijkstra(int start, vector< Edge > adj[]){
+int dijkstra(int start, vector< Edge > adj[],int pessoas){
     int dist[NUM_CITIES];
-    int path[NUM_CITIES];
-    int time[NUM_CITIES];
+    Flight path[NUM_CITIES];
+    Edge *pathEdges[NUM_CITIES];
     bool mark[NUM_CITIES];
 
     for(int i=0; i<NUM_CITIES; i++){
-        dist[i] = INF;
+        path[i].node=-1;
+        path[i].flow=INF;
+        dist[i] =INF;
     }
-    memset(path,-1,sizeof(path));
-    memset(time,0,sizeof(path));
     memset(mark,false,sizeof(mark));
 
     dist[start] = 0;
@@ -97,38 +97,45 @@ void dijkstra(int start, vector< Edge > adj[]){
             break;
 
         mark[v]=true;
-        if(path[v]!=-1)
-            cout<<citiesNames[path[v]]<<"=>"<<time[v]<<" "<<citiesNames[v]<<endl;
-        for(Edge edge : adj[v]){
+
+        for(Edge &edge : adj[v]){
 
             int to = edge.node;
-            int cost = edge.cost;
-            int arrival = edge.arrival;
-            int departure = edge.departure;
-            cout<<"Calc "<<citiesNames[v]<<"=>"<<citiesNames[to]<<" "<<departure<<"-"<<time[v]<<"="<<(departure-time[v])<<endl;
-            if((dist[v]+cost)<dist[to] && (departure-time[v])>=60){
-                dist[to]=dist[v]+cost;
-                path[to]=v;
-                time[to]=arrival;
-                city=citiesNames[v];
+            if((dist[v]+edge.cost)<dist[to] && edge.flow>0 && (edge.departure-pathEdges[v]->arrival)>=60){
+                dist[to]=dist[v]+edge.cost;
+                path[to]={v,edge.flow};
+                pathEdges[to]=&edge;
             }
         }
     }
 
     vector<int> pathe;
+    int minFlow=INF;
     int t=getCity("NA");
-    for (int v = t; v != getCity("SP"); v = path[v])
+    for (int v = t; v != getCity("SP"); v = path[v].node){
         pathe.push_back(v);
+        if(path[v].flow<minFlow)
+            minFlow=path[v].flow;
+    }
     pathe.push_back(getCity("SP"));
 
     reverse(pathe.begin(), pathe.end());
-    cout<<"[ ";
-    for(int p:pathe){
-        if(p!=-1)
-            cout<<citiesNames[p]<<" ";
+    if(minFlow>pessoas){
+        minFlow=pessoas;
     }
-    cout<<"]"<<endl;
-    cout<<"Distancia "<<dist[getCity("NA")]<<endl;
+    cout<<">>"<<minFlow<<" pessoas "<<endl;
+    for(int p:pathe){
+        if(p!=getCity("SP")){
+            pathEdges[p]->flow-=minFlow;
+            cout<<"[ "<<citiesNames[p]<<" "
+                << pathEdges[p]->departure<<" "
+                << pathEdges[p]->arrival<<" "
+                << pathEdges[p]->cost<<" "
+                <<"] "<<endl;
+        }
+    }
+    cout<<"Custo total "<<dist[getCity("NA")]<<endl;
+    return minFlow;
 
 }
 
