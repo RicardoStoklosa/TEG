@@ -56,21 +56,6 @@ int hourToMinutes(string h){
     return (hour*60)+minu;
 }
 
-int minDistance(int distancia[], bool path[]){
-        int mini = INT_MAX;
-        int min_index=0;
-
-        for(int i=0; i< NUM_CITIES; i++){
-            // cout<<endl<<path[i]<<"-"<<distancia[i]<<mini<<"-"<<endl;
-            if(path[i]==false && distancia[i] <= mini){
-                mini = distancia[i];
-                min_index = i;
-            }
-        }
-        //cout<<"min:"<<min_index<<endl;
-        return min_index;
-}
-
 int dijkstra(int start, vector< Edge > adj[],int pessoas){
     int dist[NUM_CITIES];
     Flight path[NUM_CITIES];
